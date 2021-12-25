@@ -17,8 +17,8 @@ const getContactById = async (contactId) => {
 }
 
 const removeContact = async (contactId) => {
-  const conatctExists = await getContactById(contactId)
-  if (!conatctExists) {
+  const contactExists = await getContactById(contactId)
+  if (!contactExists) {
     return null
   }
 
@@ -37,14 +37,13 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const conatctExists = await getContactById(contactId)
   if (!conatctExists) {
-    console.log(chalk.yellow('No contact with such ID found'));
-    return
+    return null
   }
 
   const index = contacts.findIndex((contact) => contact.id === contactId)
-  const updatedContact = { id: contactId, ...body };
+  const updatedContact = { id: contactId, ...contacts[index], ...body };
 
-  contacts[index] = newContact
+  contacts[index] = updatedContact
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
   return updatedContact
 }
