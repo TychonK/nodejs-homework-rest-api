@@ -7,11 +7,11 @@ import path from 'path'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const contactsPath = path.join(__dirname, 'contacts.json')
 
-const listContacts = async () => {
+const listContacts = () => {
   return contacts
 }
 
-const getContactById = async (contactId) => {
+const getContactById = (contactId) => {
   const contact = contacts.find((contact) => contact.id == contactId)
   return contact
 }
@@ -41,7 +41,7 @@ const updateContact = async (contactId, body) => {
   }
 
   const index = contacts.findIndex((contact) => contact.id === contactId)
-  const updatedContact = { id: contactId, ...contacts[index], ...body };
+  const updatedContact = { ...contacts[index], ...body };
 
   contacts[index] = updatedContact
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
