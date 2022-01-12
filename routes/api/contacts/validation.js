@@ -4,6 +4,7 @@ const createSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean().optional()
 })
 
 const updateSchema = Joi.object({
@@ -15,6 +16,19 @@ const updateSchema = Joi.object({
 const idSchema = Joi.object({
     id: Joi.string().required()
 })
+
+const favoriteSchema = Joi.object({
+    favorite: Joi.boolean().required()
+})
+
+export const validateFavorite = async (req, res, next) => {
+    try {
+        const value = await favoriteSchema.validateAsync(req.body)
+    } catch (err) {
+        return res.status(400).json({message: err.message.replace(/"/g, '')})
+    }
+    next()
+}
 
 export const validateCreate = async (req, res, next) => {
     try {

@@ -18,6 +18,6 @@ const contactsSchema = new Schema({
     },
 })
 
-const Contact = model('contact', contactsSchema)
+const Contact = model('contacts', contactsSchema)
 
 export default Contact
