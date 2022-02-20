@@ -35,6 +35,6 @@ userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
-const User = model('users', userSchema)
+const User = model('user', userSchema)
 
 export default User
