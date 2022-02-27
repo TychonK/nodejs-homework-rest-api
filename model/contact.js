@@ -1,5 +1,5 @@
 import pkg from 'mongoose'
-const { Schema, model } = pkg
+const { Schema, SchemaTypes, model } = pkg
 
 const contactsSchema = new Schema({
     name: {
@@ -16,6 +16,11 @@ const contactsSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+      required: true,
+    }
 })
 
 const Contact = model('contacts', contactsSchema)
