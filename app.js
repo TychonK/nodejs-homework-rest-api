@@ -2,8 +2,9 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 
-import contactsRouter from './routes/api/contacts'
-import usersRouter from './routes/api/auth'
+import contactsRouter from './routes/api/contacts/index'
+import authRouter from './routes/api/auth/index'
+import usersRouter from './routes/api/users/index'
 
 const app = express()
 
@@ -13,7 +14,10 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use(express.static('uploads'));
+
 app.use('/api/contacts', contactsRouter)
+app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 
 app.use((req, res) => {
