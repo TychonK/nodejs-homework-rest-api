@@ -3,6 +3,9 @@ import HttpCode from "../lib/constants"
 
 import authService from "../service/auth"
 
+import { EmailService, SenderSendgrid } from "../service/email"
+import emailToName from "email-to-name"
+
 const registration = async (req, res, next) => {
     try {
         const { email } = req.body
@@ -11,8 +14,19 @@ const registration = async (req, res, next) => {
             return res.status(HttpCode.CONFLICT).json({status: 'error', code: HttpCode.CONFLICT, message: 'This email already exists'})
         }
 
-        const data = await authService.create(req.body)
-        res.status(HttpCode.CREATED).json({status: 'CREATED', code: HttpCode.CREATED, data})
+        const userData = await authService.create(req.body)
+
+        const emailService = new EmailService(process.env.NODE_ENV, new SenderSendgrid())
+
+        const isVerifyEmailSent = await emailService.sendVerifyEmail(email, emailToName.process(userData.email), userData.verificationToken)
+        delete userData.verificationToken
+
+        res.status(HttpCode.CREATED).json({
+            status: 'CREATED',
+            code: HttpCode.CREATED,
+            data: { ...userData, isVerifyEmailSent: isVerifyEmailSent }
+        })
+        
     } catch (err) {
         next(err)
     }
