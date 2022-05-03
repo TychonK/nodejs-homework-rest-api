@@ -1,6 +1,7 @@
 import pkg from 'mongoose'
 import bcrypt from 'bcryptjs'
 import gravatar from 'gravatar'
+import { randomUUID } from 'crypto'
 
 const { Schema, model } = pkg
 
@@ -28,7 +29,15 @@ const userSchema = new Schema({
     default: function () {
       return gravatar.url(this.email, {s: 250}, true)
     }
-  }
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: randomUUID(),
+  },
 })
 
 userSchema.pre('save', async function (next) {
